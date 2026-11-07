@@ -1,0 +1,22 @@
+# MATLAB temporary / autosave files
+*.asv
+*.m~
+*.autosave
+*.mlx.autosave
+octave-workspace
+slprj/
+codegen/
+
+# outputs of the examples (saveflag = true)
+examples/*_cst.dat
+examples/*_cst.mat
+*.png
+*.fig
+figs/
+
+# OS / editor
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
