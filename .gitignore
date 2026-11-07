@@ -20,3 +20,6 @@ desktop.ini
 .DS_Store
 .vscode/
 .idea/
+
+# README images are kept
+!docs/img/*.png

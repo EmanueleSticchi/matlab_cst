@@ -9,6 +9,27 @@ The geometry in the physical domain is always an object of a class (`Airfoil_cla
 
 The scope follows [cst-modeling3d](https://github.com/swayli94/cst-modeling3d) (Python); the mathematics follows Kulfan (2008), referenced by equation number in the code.
 
+<table>
+  <tr>
+    <td width="50%"><img src="docs/img/build_wing.png" alt="Cranked wing built from its CST parameters"></td>
+    <td width="50%"><img src="docs/img/build_nacelle.png" alt="Non-axisymmetric nacelle built from its CST parameters"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Wing</b> with a planform break: 3D surface, planform, root/break/tip airfoils</td>
+    <td align="center"><b>Nacelle</b>: crown, side and keel profiles, smooth all around</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/img/build_fuselage.png" alt="Fuselage built from its CST parameters"></td>
+    <td width="50%"><img src="docs/img/build_airfoil.png" alt="Airfoil with its component airfoils and shape functions"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Fuselage</b>: crown, keel and half-breadth lines, cross sections</td>
+    <td align="center"><b>Airfoil</b>: component airfoils and shape functions $S_u$, $S_l$</td>
+  </tr>
+</table>
+
+*Output of the `examples/build_*.m` live scripts: every CST parameter is a slider and the figure follows it.*
+
 ```matlab
 addpath src
 AF   = Airfoil_class('examples/data/naca0012.dat');    % physical domain
@@ -44,6 +65,9 @@ $$\zeta(\psi) = C(\psi)\,S(\psi) + \psi\,\Delta\zeta_{TE}, \qquad C(\psi) = \psi
 - from $n \approx 6$ the CST airfoil is within wind tunnel tolerance of the original (Sec. VII).
 
 For fixed $N_1, N_2$ the airfoil is **linear** in $[A_u; A_l; \Delta\zeta_u; \Delta\zeta_l]$, so `Airfoil2CST` is a linear least squares fit (backslash): unique solution, no initial guess, no optimizer, no toolbox. With `LEcontinuity=true` (default) $A_{l,0} = -A_{u,0}$ (same nose radius on both sides).
+
+<p align="center"><img src="docs/img/fit_airfoil_convergence.png" width="520" alt="Fit error of NACA 0012 against the Bernstein order"><br>
+<i>Fit error of NACA 0012 against the Bernstein order n (<code>examples/fit_airfoil.m</code>).</i></p>
 
 **Wing.** Every chordwise coefficient is a Bernstein polynomial along the span $\eta = y/b$ (Sec. XII, Eq. 43–48),
 
@@ -100,6 +124,9 @@ The question was whether wings with planform breaks (crank, kink of the leading 
 - **readability**: with the default `ny_plan = 1` (straight leading and trailing edge, linear twist in each panel) the planform control values *are* the values at the root, at each break and at the tip, e.g. `CST.c = [c_root; c_break; c_tip]`.
 - **cost**: `Nseg·ny + 1` control values per coefficient instead of `ny + 1`. Each segment needs at least `ny + 1` sections; `Wing2CST` chooses `ny` automatically (up to 3) when not given and stops with a clear message otherwise.
 - **effect**: in `examples/fit_wing.m` the cranked planform is recovered to 1e-5 m with the break and with errors of 0.36 m in chord and 0.19 m in Xle without it.
+
+<p align="center"><img src="docs/img/fit_wing_planform.png" width="520" alt="Cranked planform fitted with and without the break"><br>
+<i>Cranked planform fitted with the break (blue, on the input) and without it (red dashed) (<code>examples/fit_wing.m</code>).</i></p>
 
 ## Function reference
 `help <name>` gives the full description of each one.
